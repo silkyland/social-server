@@ -6,6 +6,7 @@ const SALT_WORK_FACTOR = 8;
 
 const schema = mongoose.Schema({
   name: String,
+  avatar: { type: String, default: "https://via.placholder.com/64x64" },
   username: {
     type: String,
     required: true,
