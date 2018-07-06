@@ -8,12 +8,27 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/create", async (req, res, next) => {
-  const { message } = req.body.Message;
+  const { message } = req.body;
+  const user = req.user;
   let messageTable = new Message();
   messageTable.message = message;
+  messageTable.userId = user._id;
   try {
-    await message.save();
-    res.json(message);
+    await messageTable.save();
+    res.json(messageTable);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.post("/update", async (req, res) => {
+  const { message, _id } = req.body;
+  try {
+    let updateMessage = await Message.update(
+      { _id: _id },
+      { $set: { message: message } }
+    );
+    res.json(updateMessage);
   } catch (error) {
     res.status(500).send(error);
   }

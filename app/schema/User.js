@@ -29,10 +29,10 @@ schema.plugin(timestamps, {
 });
 
 schema.methods.generateHash = password => {
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_WORK_FACTOR), null);
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_WORK_FACTOR));
 };
 
-schema.methods.validPassword = password => {
+schema.methods.validatePassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 

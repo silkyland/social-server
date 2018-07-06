@@ -5,13 +5,11 @@ import config from "../config";
 import User from "../schema/User";
 const router = express.Router();
 
-router.post("/login", (req, res, next) => {
+router.post("/login", (req, res) => {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err || !user) {
       return res.status(400).json({
-        message: info
-          ? info.message
-          : "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง !"
+        message: info ? info.message : "Incorrect username or password"
       });
     }
 
@@ -19,7 +17,7 @@ router.post("/login", (req, res, next) => {
       if (err) {
         return res.send(err);
       }
-      const token = jwt.sign(user, config.jwt.APP_SECRET, {
+      const token = jwt.sign(user.toJSON(), config.jwt.APP_SECRET, {
         expiresIn: config.jwt.EXPIRE_IN
       });
       return res.json({ user, token });

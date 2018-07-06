@@ -3,11 +3,11 @@ import timestamps from "mongoose-timestamp";
 import paginate from "mongoose-paginate";
 
 const schema = mongoose.Schema({
-  user: String,
+  userId: String,
   message: String,
   replies: [
     {
-      user: String,
+      userId: String,
       message: String,
       createdAt: { type: Date, default: Date.now },
       updatedAt: { type: Date, default: Date.now }

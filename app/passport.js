@@ -11,21 +11,24 @@ passport.use(
       usernameField: "username",
       passwordField: "password"
     },
-    (username, password, callback) => {
-      User.findOne({
-        username: username,
-        password: password
-      })
-        .then(user => {
-          if (!user)
-            return callback(null, false, {
-              message: "Incorrect username or password"
-            });
+    async (username, password, callback) => {
+      try {
+        let user = await User.findOne({ username: username });
+        if (!user)
+          return callback(null, false, {
+            message: "Incorrect username or password"
+          });
+        let isValid = await user.validatePassword(password);
+        if (isValid) {
           return callback(null, user, { message: "Logged in successfully" });
-        })
-        .catch(error => {
-          return callback(error);
-        });
+        } else {
+          return callback(null, false, {
+            message: "Incorrect username or password"
+          });
+        }
+      } catch (error) {
+        return callback(error);
+      }
     }
   )
 );
@@ -37,7 +40,7 @@ passport.use(
       secretOrKey: config.jwt.APP_SECRET
     },
     (payload, callback) => {
-      return User.findOneById(payload._id)
+      return User.findById(payload._id)
         .then(user => {
           return callback(null, user);
         })
