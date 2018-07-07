@@ -30,14 +30,7 @@ app.get("/", (req, res) => {
 
 app.get("/messages", async (req, res) => {
   // SELECT * FROM messages
-  let messages = await Message.aggregate({
-    $lookup: {
-      from: "users",
-      localField: "userId",
-      foreignField: "_id",
-      as: "user_profile"
-    }
-  });
+  let messages = await Message.find({});
   res.json(messages);
 });
 
