@@ -1,5 +1,6 @@
 import express from "express";
 import Message from "../schema/Message";
+import Reply from "../schema/Reply";
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -62,80 +63,6 @@ router.delete("/remove", async (req, res) => {
     });
   } catch (error) {
     return res.status(500).send(error);
-  }
-});
-
-/****************
-/* Reply
-/***************/
-router.post("/addReply", async (req, res) => {
-  const { _id, replyMessage } = req.body;
-  if (!_id || !replyMessage) {
-    res.status(422).json({
-      message: "โปรดตรวจสอบการใส่ข้อมูลของคุณ"
-    });
-  }
-  try {
-    let updateMessage = await Message.update(
-      { _id: _id },
-      { $push: { replies: { userId: req.user._id, message: replyMessage } } }
-    );
-    let updatedMessage = await Message.findById(_id);
-    res.json({
-      alert: {
-        title: "Success !",
-        message: "Reply Message was added to message succesfully !",
-        docs: updateMessage
-      },
-      message: updatedMessage
-    });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-router.patch("/updateReply", async (req, res) => {
-  const { messageId, replyId, replyMessage } = req.body;
-  if (!messageId || !replyId || !replyMessage) {
-    res.status(422).json({ message: "โปรดตรวจสอบการใส่ข้อมูลของคุณ" });
-  }
-  try {
-    let updateMessage = await Message.update(
-      { _id: messageId, "replies._id": replyId },
-      { $set: { "replies.$.message": replyMessage } }
-    );
-    let updatedMessage = await Message.findById(messageId);
-    res.json({
-      alert: {
-        title: "Success !",
-        message: "Reply Message was added to message succesfully !",
-        docs: updateMessage
-      },
-      message: updatedMessage
-    });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-router.delete("/removeReply", async (req, res) => {
-  const { messageId, replyId } = req.body;
-  try {
-    let updateMessage = await Message.update(
-      { _id: messageId },
-      { $pull: { replies: { _id: replyId } } }
-    );
-    let updatedMessage = await Message.findById(_id);
-    res.json({
-      alert: {
-        title: "Success !",
-        message: "Reply Message was removed succesfully !",
-        docs: updateMessage
-      },
-      message: updatedMessage
-    });
-  } catch (error) {
-    res.status(500).send(error);
   }
 });
 
