@@ -36,7 +36,7 @@ app.get("/messages", async (req, res) => {
         from: "users",
         localField: "userId",
         foreignField: "_id",
-        as: "user"
+        as: "user_profile"
       }
     }
   ]);
