@@ -1,10 +1,10 @@
 const app = {
   db: {
-    host: "localhost",
-    port: 27017,
-    name: "social",
-    username: "",
-    password: ""
+    host: "ds229621.mlab.com",
+    port: 29621,
+    name: "server",
+    username: "admin",
+    password: "qwerty9999"
   },
   jwt: {
     APP_SECRET: "ILOVEYOU",
