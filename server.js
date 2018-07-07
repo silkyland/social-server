@@ -4,9 +4,9 @@ import express from "express";
 import logger from "morgan";
 import { auth, message, user } from "./app/routers";
 import passport from "./app/passport";
-
 //run db connect
 import "./app/core/connect";
+import Message from "./app/schema/Message";
 
 const app = express();
 app.use(express.json());
@@ -25,6 +25,12 @@ app.get("/", (req, res) => {
     author: "Bundit Nuntates",
     version: "0.1-beta"
   });
+});
+
+app.get("/messages", async (req, res) => {
+  // SELECT * FROM messages
+  let messages = await Message.find({});
+  res.json(messages);
 });
 
 const port = process.env.PORT || 8080;

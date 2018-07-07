@@ -70,6 +70,11 @@ router.delete("/remove", async (req, res) => {
 /***************/
 router.post("/addReply", async (req, res) => {
   const { _id, replyMessage } = req.body;
+  if (!_id || !replyMessage) {
+    res.status(422).json({
+      message: "โปรดตรวจสอบการใส่ข้อมูลของคุณ"
+    });
+  }
   try {
     let updateMessage = await Message.update(
       { _id: _id },
@@ -91,6 +96,9 @@ router.post("/addReply", async (req, res) => {
 
 router.patch("/updateReply", async (req, res) => {
   const { messageId, replyId, replyMessage } = req.body;
+  if (!messageId || !replyId || !replyMessage) {
+    res.status(422).json({ message: "โปรดตรวจสอบการใส่ข้อมูลของคุณ" });
+  }
   try {
     let updateMessage = await Message.update(
       { _id: messageId, "replies._id": replyId },
